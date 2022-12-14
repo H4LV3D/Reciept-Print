@@ -1,0 +1,203 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="./css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script> 
+    <title>Invoice to reciept</title>
+    <style>
+
+        @media print {
+        * {
+            visibility: hidden;
+            margin: 0px !important;
+            padding: 0px !important;
+            width: 100% !important;
+        }
+        #printDoc {
+            /* visibility: hidden !important; */
+            display: none;
+        }
+        #print{
+            height: 300px !important;
+        }
+        #print * {
+            visibility: visible;
+            -webkit-print-color-adjust: exact !important; 
+            text-align: left;
+            font-size: 12px !important;
+            padding: 0px 2px !important;
+            margin-bottom: 8px !important;
+        }
+    }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 border-end px-4" id="printDoc">
+                    <h3 class="py-3 px-auto">Invoice</h3>
+                    <div class="card col-md-9 py-3 px-4">
+                        <div class="card-head">
+                            <img src="logo.png" alt="" style="width : 60px;">
+                            <p class="fw-normal fs-5">Life Fount Medical Center</p>
+                            <p class="fw-normal fs-5">Invoice <span></span></p>
+                            <hr>
+                        </div>
+                        <form action="" method="get">
+                        <div class="mb-3">
+                            <div class="input-group date" data-provide="datepicker">
+                                <input class="datepicker form-control" data-date-format="mm/dd/yyyy" data-provide="datepicker" id="date">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>  
+                        </div>
+                        <div class="mb-3">
+                            <label for="cardno" class="form-label">Card Number</label>
+                            <input type="text" id="cardno" class="form-control" placeholder="FC0001/PC0001" aria-label="Username" 
+                            onchange="clickme()"
+                            aria-describedby="basic-addon1" 
+                             autofocus> 
+                        </div>
+                        <div class="mb-3">
+                            <label for="p_name" class="form-label">Patient Name</label>
+                            <input type="text" id="p_name" class="form-control" placeholder="Ade Johnson" aria-label="Username"
+                            onchange="clickme()" aria-describedby="basic-addon1">
+                        </div>
+                        <div class="mb-3"> 
+                            <label for="p_method" class="form-label">Payment Method</label>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="drop"  data-bs-toggle="dropdown" aria-expanded="false">
+                                  Cash
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="drop">
+                                  <li id="cash" onclick="onChange('cash')"><a class="dropdown-item" href="#">Cash</a></li>
+                                  <li id="pos" onclick="onChange('pos')"><a class="dropdown-item" href="#">POS</a></li>
+                                  <li id="transfer" onclick="onChange('transfer')"><a class="dropdown-item" href="#">Transfer</a></li>
+                                </ul>
+                              </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="p_reason" class="form-label">Payment For:</label>
+                            <br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="Drugs" name="check" onchange="newed('inlineCheckbox1')">
+                                <label class="form-check-label" for="inlineCheckbox1">Drugs</label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="Test" name="check" onchange="newed('inlineCheckbox2')">
+                                <label class="form-check-label" for="inlineCheckbox2">Test</label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="Surgeries" name="check" onchange="newed('inlineCheckbox3')">
+                                <label class="form-check-label" for="inlineCheckbox3">Surgeries</label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="Procedures" name="check" onchange="newed('inlineCheckbox4')">
+                                <label class="form-check-label" for="inlineCheckbox4">Procedures</label>
+                              </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="inlineCheckbox5" value="Immunization" name="check" onchange="newed('inlineCheckbox5')">
+                                 <label class="form-check-label" for="inlineCheckbox5">Immunization</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="inlineCheckbox6" value="Delivery" name="check" onchange="newed('inlineCheckbox6')">
+                                <label class="form-check-label" for="inlineCheckbox6">Delivery</label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="p_total" class="form-label">Total Amount</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">#</span>
+                                <input type="text" id="p_total" class="form-control" placeholder="10000" aria-label="Username" 
+                                onchange="clickme()" 
+                                aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="p_paid" class="form-label">Amount Paid</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">#</span>
+                                <input type="text" class="form-control" id="p_paid" placeholder="10000" aria-label="Username" 
+                                onchange="clickme()"
+                                aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="form-label">Outstanding</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">#</span>
+                                <input type="text" id="p_outstanding" class="form-control"
+                                onchange="clickme()"
+                                 placeholder="0" disabled>
+                            </div>
+                        </div>
+                    </form>
+                <button class="btn btn-md btn-primary" onclick="clickme()">Generate</button>
+            </div>
+                </div>
+                <div class="col-md-6" id="rec">
+                    <h3 class="rec">Reciept</h3>
+                    <div class="position-fixed col-6">
+                        <div class="card col-md-8" id="card">
+                            <div id="print">
+                            <div class="card-head" >
+                                <!-- <img src="logo.png" alt="" id="editor" style="width : 30px;"> -->
+                                <p class="fw-normal fs-5">Life Fount Medical Center</p>
+                                <p class="fw-normal fs-5">E-Reciept</p>
+                                <hr>
+                            </div>
+                            <div class="card-body">
+                            <div class="mb-3"> 
+                                <p class="form-label">Reciept ID : <span id="r_date"></span></p>
+                            </div>
+                            <div class="mb-3">
+                                <p class="form-label">Card Number : <span id="r_cardno">FC9999</span></p>
+                            </div>
+                            <div class="mb-3">
+                                <p class="form-label">Patient Name : <span id="r_name">Dummy Text</span></p>
+                            </div>
+                            <div class="mb-3">
+                                <p class="form-label">Payment Method : <span id="r_pay">Cash</span></p>
+                            </div>
+                            <div class="mb-3">
+                                <p class="form-label">Amount Paid : <span id="r_paid">#00000</span></p>
+                            </div>
+                            <div class="mb-3">
+                                <p class="form-p">Outstanding : <span id="r_out">#00000</span></label>
+                            </div>
+                            <br>
+                            <br>
+                            <br>
+                            <p>.</p>
+                            </div>
+                        </div>
+                    
+                        
+                            <button class="btn btn-md btn-primary" id="button" onclick="printme()">Print</button>
+                        </div>
+                        </div>
+                        </div>
+                </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="./js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+
+    <script type="text/javascript" src="libs/png_support/zlib.js"></script>
+    <script type="text/javascript" src="libs/png_support/png.js"></script>
+    <script type="text/javascript" src="jspdf.plugin.addimage.js"></script>
+    <script type="text/javascript" src="jspdf.plugin.png_support.js"></script>
+    <script type="text/javascript" src="jspdf.js"></script>
+
+
+    <script>
+    </script>
+  </body>
+</html>
