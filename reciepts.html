@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link
+      href="./assets/bootstrap-5.0.2-dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./index.css" />
+    <link
+      href="./assets/fontawesome-free-6.2.1-web/css/fontawesome.css"
+      rel="stylesheet"
+    />
+    <link
+      href="./assets/fontawesome-free-6.2.1-web/css/brands.css"
+      rel="stylesheet"
+    />
+    <link
+      href="./assets/fontawesome-free-6.2.1-web/css/solid.css"
+      rel="stylesheet"
+    />
+
+    <title>LFMC RECIEPT</title>
+    <style>
+      @media print {
+        * {
+          visibility: hidden;
+          margin: 0px !important;
+          padding: 0px !important;
+          width: 100% !important;
+        }
+        #printDoc {
+          display: none;
+        }
+        #print {
+          height: 400px !important;
+        }
+        #print img {
+          width: 60px !important;
+          height: 60px !important;
+        }
+        #print * {
+          visibility: visible;
+          print-color-adjust: exact !important;
+          -webkit-print-color-adjust: exact !important;
+          text-align: left;
+          font-size: 12px !important;
+          padding: 0px 2px !important;
+          margin-bottom: 8px !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="row d-flex">
+      <div class="d-none d-md-block sidebar">
+        <div class="logo-details">
+          <i class="fas fa-house-medical-flag fa-lg fa-fw icon"></i>
+          <div class="logo_name">LFMC</div>
+          <i class="fas fa-stream fa-sm fa-fw" id="btn"></i>
+        </div>
+        <ul class="nav-list">
+          <li>
+            <a href="/">
+              <i class="fa-solid fa-house fa-lg fa-fw"></i>
+              <span class="links_name">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="/invoice_reciept.html">
+              <i class="fas fa-file-invoice fa-lg fa-fw"></i>
+              <span class="links_name">Invoice - Reciept</span>
+            </a>
+          </li>
+          <li>
+            <a href="/reciepts.html" class="active">
+              <i class="fas fa-file-medical fa-2x fa-fw"></i>
+              <span class="links_name">Reciept Record</span>
+            </a>
+          </li>
+          <li>
+            <a href="/settings.html">
+              <i class="fas fa-gear fa-lg fa-fw"></i>
+              <span class="links_name">Settings</span>
+            </a>
+          </li>
+          <li class="profile">
+            <div class="profile-details">
+              <i class="fas fa-user-tag fa-3x fa-fw"></i>
+              <div class="name_job">
+                <div class="name">MRS GIFT</div>
+                <div class="job">Cashier</div>
+              </div>
+            </div>
+            <a href="/index.html"
+              ><i class="fas fa-sign-out fa-lg fa-fw" id="log_out"></i
+            ></a>
+          </li>
+        </ul>
+      </div>
+
+      <section class="main-body vh-100 mx-auto">
+        <div class="row p-5 d-flex justify-content-center">
+          <div class="row mb-3">
+            <h3>Reciept Records</h3>
+          </div>
+          <div class="row">
+            <div class="col-8 col-xl-6">
+              <label for="search">Search Card No.</label>
+              <div class="input-group">
+                <input
+                  class="form-control"
+                  id="search"
+                  placeholder="FC000"
+                  aria-describedby="basic-addon1"
+                />
+                <span class="input-group-text" id="basic-addon1">
+                  <i class="fas fa-search fa-sm fa-fw"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <script src="./script.js"></script>
+    <script type="text/javascript" src="./Scripts/popper.min.js"></script>
+    <script type="text/javascript" src="./Scripts/jquery.min.js"></script>
+    <script src="./assets/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./Scripts/jspdf.min.js"></script>
+    <script type="text/babel" src="./Scripts/jspdf.js"></script>
+    <script type="text/javascript" src="./libs/png_support/png.js"></script>
+    <script type="text/javascript" src="./libs/png_support/zlib.js"></script>
+    <script type="text/javascript" src="./modules/addimage.js"></script>
+    <script type="text/javascript" src="./modules/png_support.js"></script>
+    <script>
+      let sidebar = document.querySelector(".sidebar");
+      let closeBtn = document.querySelector("#btn");
+      let searchBtn = document.querySelector(".bx-search");
+      let button = document.querySelector(".fa-stream");
+
+      closeBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+        $(button).toggleClass("fa-stream fa-times-square");
+      });
+      $(document).ready(function () {
+        $(".dropdown-toggle").dropdown();
+      });
+    </script>
+  </body>
+</html>
