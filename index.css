@@ -283,3 +283,10 @@ label {
 ul {
   padding-left: 0rem !important;
 }
+.login_link:hover {
+  background-color: #e3e3e3;
+  color: blue;
+  padding: 6px 12px;
+  margin: 6px 0px;
+  border-radius: 4px;
+}
