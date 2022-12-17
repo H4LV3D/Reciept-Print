@@ -33,16 +33,18 @@
           <small class="p-0 m-0">Cashier login.</small>
           <hr />
         </div>
-        <form action="">
+        <form id="login-form">
           <div class="mb-3">
             <label for="" class="form-label">Username</label>
             <input
               type="text"
               class="form-control"
-              name=""
-              id=""
+              name="Username"
+              id="username"
               aria-describedby="helpId"
               placeholder="Johnson"
+              required
+              autofocus
             />
           </div>
           <div class="">
@@ -50,9 +52,10 @@
             <input
               type="password"
               class="form-control"
-              name=""
-              id=""
+              name="Password"
+              id="password"
               placeholder=""
+              required
             />
           </div>
           <div class="d-flex justify-content-end">
@@ -75,15 +78,39 @@
         </div>
       </div>
     </div>
-    <script src="./script.js"></script>
-    <script type="text/javascript" src="./popper.min.js"></script>
-    <script type="text/javascript" src="./jquery.min.js"></script>
+    <script>
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          var username = document.getElementById("username").value;
+          var password = document.getElementById("password").value;
+          fetch("http://127.0.0.1:3000/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              "Access-Control-Allow-Origin": "*",
+            },
+            body:
+              "username=" +
+              encodeURIComponent(username) +
+              "&password=" +
+              encodeURIComponent(password),
+          })
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (response) {
+              if (response.success) {
+                alert("Logged In");
+              } else {
+                console.log("login failed");
+              }
+            });
+        });
+    </script>
+    <script type="text/javascript" src="./Scripts/popper.min.js"></script>
+    <script type="text/javascript" src="./Scripts/jquery.min.js"></script>
     <script src="./assets/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./jspdf.min.js"></script>
-    <script type="text/babel" src="./jspdf.js"></script>
-    <script type="text/javascript" src="./libs/png_support/png.js"></script>
-    <script type="text/javascript" src="./libs/png_support/zlib.js"></script>
-    <script type="text/javascript" src="./modules/addimage.js"></script>
-    <script type="text/javascript" src="./modules/png_support.js"></script>
   </body>
 </html>

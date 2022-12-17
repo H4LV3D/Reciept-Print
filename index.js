@@ -1,10 +1,25 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
+const cors = require("cors");
+const bodyParser = require("body-parser");
 
 const app = express();
+app.use(
+  cors({
+    methods: ["GET", "POST"],
+    origin: [
+      "http://localhost:5500",
+      "http://127.0.0.1:5500",
+      "https://cabifyapp.up.railway.app/",
+    ],
+    credentials: true,
+    optionSuccessStatus: 200,
+  })
+);
 
 // Use body-parser middleware to parse request bodies
 app.use(express.json());
+app.use(bodyParser.json());
 
 const database = {
   user1: {
