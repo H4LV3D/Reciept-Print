@@ -1,10 +1,11 @@
-// const fs = require("fs");
-import fs from "fs";
-// const path = require("path");
-import path from "path";
+const fs = require("fs");
+// import fs from "fs";
+const path = require("path");
+// import path from "path";
 
 // Read all PDF files in the "receipt" folder
 const folderPath = path.join(__dirname, "Receipt");
+console.log(folderPath);
 const files = fs
   .readdirSync(folderPath)
   .filter((file) => file.endsWith(".pdf"));
