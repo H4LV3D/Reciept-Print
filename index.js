@@ -116,7 +116,7 @@ app.get("/reciept", (req, res) => {
       modifiedDate,
       contexts,
     });
-  }, 1000);
+  }, 2000);
 });
 
 app.get("/", function (req, res) {
