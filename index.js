@@ -12,11 +12,7 @@ const app = express();
 app.use(
   cors({
     methods: ["GET", "POST"],
-    origin: [
-      "http://localhost:5500",
-      "http://127.0.0.1:5500",
-      "https://cabifyapp.up.railway.app/",
-    ],
+    origin: ["http://localhost:5500", "http://127.0.0.1:5500"],
     credentials: true,
     optionSuccessStatus: 200,
   })
@@ -29,30 +25,36 @@ app.use(bodyParser.json());
 const database = {
   user1: {
     username: "gift",
-    password: "$2b$10$0NCgdZBNZJzhNk8WCH2FyepGe2oQJp.XiBvIbJGC6LQxrHHi0UPgu",
+    name: "Nwabudo",
+    password: "$2b$10$s703D.RXt/vp5bAWtKBNNeGvYXMzqO2SSHYQo2vC/HJEPL5HaHJcK",
   },
   user2: {
     username: "gifted",
+    name: "Mrs gift",
     password: "$2b$10$YkWKvC4YjxUEAn7M1n3h7ecLtX6bBflKO.IJpevndL.MpzTH5L7ei",
   },
 };
 
-// Define a route for logging in
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
 
   if (username === "gift" || username === "gifted") {
-    let passcode =
-      username === "gift" ? database.user1.password : database.user2.password;
+    let user = username === "gift" ? database.user1 : database.user2.password;
+
+    console.log(user);
 
     const hashedPassword = bcrypt.hashSync(password, 10);
-    if (bcrypt.compareSync(password, hashedPassword)) {
+    console.log(hashedPassword);
+    if (bcrypt.compare(user.password, hashedPassword)) {
       console.log("success");
       res.status(200).json({
         success: `Welcome Home`,
+        name: user.name,
       });
     } else {
-      res.status(401).send("Incorrect password");
+      res.status(401).json({
+        failed: "Invalid Username or Password",
+      });
     }
   } else {
     res.status(401).send("Invalid username");

@@ -61,23 +61,74 @@
           <div class="d-flex justify-content-end">
             <small class="pt-2">Forgot Password?</small>
           </div>
-          <button type="submit" class="btn btn-primary w-100 mt-3 roundeed">
+          <div class="text-danger text-center" id="result"></div>
+          <button
+            type="submit"
+            class="btn btn-primary w-100 mt-3 roundeed shadow-none"
+          >
             Submit
           </button>
         </form>
         <div>
           <div class="py-2">
-            <p class="m-0 text-black">
-              <a
-                href="./invoice_reciept.html"
-                class="text-decoration-none text-black login_link"
-                >Extra Duty? Click here...</a
-              >
+            <p
+              class="text-decoration-none text-black login_link"
+              data-bs-target="#exampleModalToggle"
+              data-bs-toggle="modal"
+            >
+              Extra Duty? Click here...
             </p>
           </div>
         </div>
       </div>
     </div>
+
+    <div
+      class="modal fade"
+      id="exampleModalToggle"
+      aria-hidden="true"
+      aria-labelledby="exampleModalToggleLabel"
+      tabindex="-1"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalToggleLabel">Extra Duty</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body p-5">
+            <form action="./invoice_reciept.html">
+              <label for="name">Enter Student/Staff Name</label>
+              <input
+                type="text"
+                class="form-control mb-4"
+                id="name"
+                placeholder="Name"
+                autofocus
+                required
+              />
+              <a
+                href="./invoice_reciept.html"
+                class="d-flex justify-content-end w-100"
+              >
+                <button
+                  class="btn btn-primary py-2 px-5 rounded w-100 shadow-none"
+                  type="submit"
+                >
+                  Submit
+                </button>
+              </a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script>
       document
         .getElementById("login-form")
@@ -98,14 +149,17 @@
               return response.json();
             })
             .then(function (response) {
-              console.log(response);
-              if (response) {
+              localStorage.setItem("username", response.name);
+              if (response.success) {
                 window.location.replace("/invoice_reciept.html");
               } else {
+                document.getElementById("result").innerText = "Login failed";
                 console.log("login failed");
               }
             });
         });
+      document.getElementById("username").innerText =
+        localStorage.getItem("username");
     </script>
     <script type="text/javascript" src="./Scripts/popper.min.js"></script>
     <script type="text/javascript" src="./Scripts/jquery.min.js"></script>

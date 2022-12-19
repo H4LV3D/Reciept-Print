@@ -371,7 +371,7 @@
                       </div>
                       <div class="col m-0 p-0">
                         <p class="form-label p-0 m-0">
-                          CASHIER : <span id=""> MRS GIFT</span>
+                          CASHIER : <span id="username"></span>
                         </p>
                       </div>
                     </div>
@@ -462,6 +462,9 @@
     <script type="text/javascript" src="./modules/addimage.js"></script>
     <script type="text/javascript" src="./modules/png_support.js"></script>
     <script>
+      document.getElementById("username").innerText =
+        localStorage.getItem("username");
+
       let sidebar = document.querySelector(".sidebar");
       let closeBtn = document.querySelector("#btn");
       let searchBtn = document.querySelector(".bx-search");
