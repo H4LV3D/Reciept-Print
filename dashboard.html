@@ -25,35 +25,6 @@
     />
 
     <title>LFMC RECIEPT</title>
-    <style>
-      @media print {
-        * {
-          visibility: hidden;
-          margin: 0px !important;
-          padding: 0px !important;
-          width: 100% !important;
-        }
-        #printDoc {
-          display: none;
-        }
-        #print {
-          height: 400px !important;
-        }
-        #print img {
-          width: 60px !important;
-          height: 60px !important;
-        }
-        #print * {
-          visibility: visible;
-          print-color-adjust: exact !important;
-          -webkit-print-color-adjust: exact !important;
-          text-align: left;
-          font-size: 12px !important;
-          padding: 0px 2px !important;
-          margin-bottom: 8px !important;
-        }
-      }
-    </style>
   </head>
   <body>
     <div class="row d-flex">
@@ -102,39 +73,17 @@
           </li>
         </ul>
       </div>
-
-      <section class="main-body vh-100 mx-auto">
-        <div class="row p-5 d-flex justify-content-center">
-          <div class="row mb-3">
-            <h3>Dashboard</h3>
-          </div>
-          <div class="row mb-4">
-            <div class="col-8 col-xl-6">
-              <label for="search">Search Card No.</label>
-              <div class="input-group">
-                <input
-                  class="form-control"
-                  id="search"
-                  placeholder="FC000"
-                  aria-describedby="basic-addon1"
-                />
-                <span class="input-group-text" id="basic-addon1">
-                  <i class="fas fa-search fa-sm fa-fw"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="row mt-4">
-            <div class="col-9 col-xl-8">
-              <div class="bg-light rounded p-4 border">
-                <h5>FC 3365</h5>
-                <p>26-05-2022</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
+
+    <section class="main-body vh-100 mx-auto">
+      <div class="row p-5 d-flex justify-content-center">
+        <div class="row mb-3">
+          <h3 class="fw-bold fs-3">Dashboard</h3>
+          <p>Welcome Mrs Gift,</p>
+        </div>
+      </div>
+    </section>
+
     <script src="./script.js"></script>
     <script type="text/javascript" src="./Scripts/popper.min.js"></script>
     <script type="text/javascript" src="./Scripts/jquery.min.js"></script>

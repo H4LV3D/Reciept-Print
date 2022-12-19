@@ -67,16 +67,16 @@ app.get("/reciept", (req, res) => {
   console.log(files);
 
   let fileName = [];
-  let fileSize = [];
-  let modifiedDate = [];
+  //   let fileSize = [];
+  //   let modifiedDate = [];
   let contexts = [];
 
   files.forEach(async (file) => {
     const filePath = path.join(folderPath, file);
     const stats = fs.statSync(filePath);
     fileName.push(file.replace(/\.[^/.]+$/, ""));
-    fileSize.push(stats.size);
-    modifiedDate.push(stats.mtime);
+    // fileSize.push(stats.size);
+    // modifiedDate.push(stats.mtime);
 
     function getPageText(pageNum, PDFDocumentInstance) {
       return new Promise(function (resolve, reject) {
@@ -100,6 +100,32 @@ app.get("/reciept", (req, res) => {
       function (PDFDocumentInstance) {
         var pageNumber = 1;
         getPageText(pageNumber, PDFDocumentInstance).then(function (textPage) {
+          function useRegex(input) {
+            let series = {
+              regex1:
+                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : ([A-Za-z0-9]+([A-Za-z0-9]+)+)  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0  \.  Test /i,
+              regex2:
+                /Life Fount Medical Center  E-Reciept  Reciept ID : [0-9]+  Card Number : ([A-Za-z0-9]+( [A-Za-z0-9]+)+)  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : [a-zA-Z]+  Amount Paid : ([+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*))(?:[eE]([+-]?\d+))?  Outstanding : ([+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*))(?:[eE]([+-]?\d+))?  \.  Drugs,Test,Drugs/i,
+              regex3:
+                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : [a-zA-Z][a-zA-Z]\s\d\d  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0  \.  Test /i,
+            };
+            if (input.match(series.regex1) == null) {
+              if (input.match(series.regex2) == null) {
+                return input.match(series.regex3);
+              } else return input.match(series.regex2);
+            } else return input.match(series.regex1);
+          }
+          //   let info = useRegex(textPage);
+          //   contexts.push(info);
+          //   Card Number : ([A-Za-z0-9]+( [A-Za-z0-9]+)+)
+          //   let details = {
+          //     RID: info[1],
+          //     Card_no: info[2],
+          //     p_name: info[3],
+          //     p_method: info[5],
+          //     p_amount: info[6],
+          //   };
+          //   contexts.push(details);
           contexts.push(textPage);
         });
       },
@@ -112,11 +138,9 @@ app.get("/reciept", (req, res) => {
   setTimeout(() => {
     res.status(200).json({
       fileName,
-      fileSize,
-      modifiedDate,
       contexts,
     });
-  }, 2000);
+  }, 1500);
 });
 
 app.get("/", function (req, res) {
