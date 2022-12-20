@@ -119,7 +119,7 @@
             </div>
           </div>
           <div class="row mb-4">
-            <div class="col-8 col-xl-6">
+            <div class="col-12 col-lg-10 col-xl-6">
               <label for="search">Search Card No.</label>
               <div class="input-group">
                 <input
@@ -142,7 +142,7 @@
             </div>
           </div>
           <div class="row mt-4">
-            <div class="col-9 col-xl-8" id="items"></div>
+            <div class="col-12 col-lg-12 col-xl-8" id="items"></div>
           </div>
         </div>
       </section>
@@ -184,12 +184,14 @@
         }, 5000);
 
         function displayAll() {
+          console.log(allFiles);
           allFiles.fileName.sort(function (a, b) {
             if (a > b) return 1;
             if (a < b) return -1;
             return 0;
           });
 
+          console.log(allFiles);
           let filteredFiles = [];
           filteredFiles = allFiles.fileName;
           let record = allFiles.fileName.length;

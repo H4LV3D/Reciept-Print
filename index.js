@@ -126,19 +126,19 @@ app.get("/reciept", (req, res) => {
           }
           let info = useRegex(textPage);
           let details;
-          contexts.push(info);
-          if ((info = null)) {
-            contexts.push(info);
-          } else {
-            // details = {
-            //   RID: info[1],
-            //   Card_no: info[2],
-            //   p_name: info[3],
-            //   p_method: info[5],
-            //   p_amount: info[6],
-            // };
-          }
-          // contexts.push(textPage);
+          // contexts.push(info);
+          // if ((info = null)) {
+          //   contexts.push(info);
+          // } else {
+          //   details = {
+          //     RID: info[1],
+          //     Card_no: info[2],
+          //     p_name: info[3],
+          //     p_method: info[5],
+          //     p_amount: info[6],
+          //   };
+          // }
+          contexts.push(textPage);
           // contexts.push(details);
         });
       },
