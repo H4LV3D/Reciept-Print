@@ -31,31 +31,30 @@ const database = {
   user2: {
     username: "gifted",
     name: "Mrs gift",
-    password: "$2b$10$YkWKvC4YjxUEAn7M1n3h7ecLtX6bBflKO.IJpevndL.MpzTH5L7ei",
+    password: "$2b$10$Ef/pz1kYgJf9X1/GRsO0Ce1vTQArq.3muVagNTvxIbgpZLaIVlOZ2",
   },
 };
 
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
   if (username === "gift" || username === "gifted") {
-    let user = username === "gift" ? database.user1 : database.user2.password;
-
+    let user = username === "gift" ? database.user1 : database.user2;
+    const hashedPassword = bcrypt.hash(password, 10);
     console.log(user);
-
-    const hashedPassword = bcrypt.hashSync(password, 10);
-    console.log(hashedPassword);
-    if (bcrypt.compare(user.password, hashedPassword)) {
-      console.log("success");
-      res.status(200).json({
-        success: `Welcome Home`,
-        name: user.name,
-      });
-    } else {
-      res.status(401).json({
-        failed: "Invalid Username or Password",
-      });
-    }
+    console.log(await hashedPassword);
+    bcrypt.compare(password, user.password, (err, response) => {
+      if (response) {
+        res.status(200).json({
+          success: `Welcome Home`,
+          name: user.name,
+        });
+      } else {
+        res.status(401).json({
+          failed: "Invalid Username or Password",
+        });
+      }
+    });
   } else {
     res.status(401).send("Invalid username");
   }
@@ -69,16 +68,12 @@ app.get("/reciept", (req, res) => {
   console.log(files);
 
   let fileName = [];
-  //   let fileSize = [];
-  //   let modifiedDate = [];
   let contexts = [];
 
   files.forEach(async (file) => {
     const filePath = path.join(folderPath, file);
-    const stats = fs.statSync(filePath);
+
     fileName.push(file.replace(/\.[^/.]+$/, ""));
-    // fileSize.push(stats.size);
-    // modifiedDate.push(stats.mtime);
 
     function getPageText(pageNum, PDFDocumentInstance) {
       return new Promise(function (resolve, reject) {
@@ -107,28 +102,44 @@ app.get("/reciept", (req, res) => {
               regex1:
                 /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : ([A-Za-z0-9]+([A-Za-z0-9]+)+)  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0  \.  Test /i,
               regex2:
-                /Life Fount Medical Center  E-Reciept  Reciept ID : [0-9]+  Card Number : ([A-Za-z0-9]+( [A-Za-z0-9]+)+)  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : [a-zA-Z]+  Amount Paid : ([+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*))(?:[eE]([+-]?\d+))?  Outstanding : ([+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*))(?:[eE]([+-]?\d+))?  \.  Drugs,Test,Drugs/i,
+                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : ([A-Za-z0-9]+( [A-Za-z0-9]+)+)  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : [a-zA-Z]+  Amount Paid : ([+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*))(?:[eE]([+-]?\d+))?  Outstanding : ([+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*))(?:[eE]([+-]?\d+))?  \.  Drugs,Test,Drugs/i,
               regex3:
+                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : [a-zA-Z][a-zA-Z]\s\d\d\d\d  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0  \.  Test /i,
+              regex4:
+                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : [a-zA-Z][a-zA-Z]\d\d\d\d  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0  \.  Test /i,
+              regex5:
                 /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : [a-zA-Z][a-zA-Z]\s\d\d  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0  \.  Test /i,
+              regex6:
+                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : [a-zA-Z][a-zA-Z]\s\d\d\d  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0  \.  Test /i,
             };
-            if (input.match(series.regex1) == null) {
-              if (input.match(series.regex2) == null) {
-                return input.match(series.regex3);
+            if (input.match(series.regex1) === null) {
+              if (input.match(series.regex2) === null) {
+                if (input.match(series.regex3) === null) {
+                  if (input.match(series.regex4) === null) {
+                    if (input.match(series.regex5) === null) {
+                      return input.match(series.regex6);
+                    } else return input.match(series.regex5);
+                  } else return input.match(series.regex4);
+                } else return input.match(series.regex3);
               } else return input.match(series.regex2);
             } else return input.match(series.regex1);
           }
-          //   let info = useRegex(textPage);
-          //   contexts.push(info);
-          //   Card Number : ([A-Za-z0-9]+( [A-Za-z0-9]+)+)
-          //   let details = {
-          //     RID: info[1],
-          //     Card_no: info[2],
-          //     p_name: info[3],
-          //     p_method: info[5],
-          //     p_amount: info[6],
-          //   };
-          //   contexts.push(details);
-          contexts.push(textPage);
+          let info = useRegex(textPage);
+          let details;
+          contexts.push(info);
+          if ((info = null)) {
+            contexts.push(info);
+          } else {
+            // details = {
+            //   RID: info[1],
+            //   Card_no: info[2],
+            //   p_name: info[3],
+            //   p_method: info[5],
+            //   p_amount: info[6],
+            // };
+          }
+          // contexts.push(textPage);
+          // contexts.push(details);
         });
       },
       function (reason) {

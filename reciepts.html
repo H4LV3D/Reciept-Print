@@ -96,9 +96,9 @@
                 <div class="job">Cashier</div>
               </div>
             </div>
-            <a href="/index.html"
-              ><i class="fas fa-sign-out fa-lg fa-fw" id="log_out"></i
-            ></a>
+            <p onclick="logout()">
+              <i class="fas fa-sign-out fa-lg fa-fw" id="log_out"></i>
+            </p>
           </li>
         </ul>
       </div>
@@ -106,7 +106,8 @@
         <div class="row p-5 d-flex justify-content-center">
           <div class="row mb-2">
             <h3>Reciept Records</h3>
-            <p>Total No. of records : <span id="record"></span></p>
+            <p class="my-0">Total No. of records : <span id="record"></span></p>
+            <p class="my-0 mb-3">Logged In : <span id="username"></span></p>
           </div>
           <div class="row mb-1">
             <div class="d-flex flex-row">
@@ -147,6 +148,20 @@
       </section>
 
       <script>
+        function pageLoad() {
+          document.getElementById("username").innerText =
+            localStorage.getItem("username");
+          if (localStorage.getItem("username") === "") {
+            window.location.href = "./index.html";
+          }
+        }
+        pageLoad();
+
+        function logout() {
+          localStorage.setItem("username", "");
+          window.location.href = "./index.html";
+        }
+
         let allFiles = [];
 
         fetch("http://127.0.0.1:5000/reciept", {

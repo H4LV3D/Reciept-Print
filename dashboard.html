@@ -67,9 +67,9 @@
                 <div class="job">Cashier</div>
               </div>
             </div>
-            <a href="/index.html"
-              ><i class="fas fa-sign-out fa-lg fa-fw" id="log_out"></i
-            ></a>
+            <p onclick="logout()">
+              <i class="fas fa-sign-out fa-lg fa-fw" id="log_out"></i>
+            </p>
           </li>
         </ul>
       </div>
@@ -79,7 +79,7 @@
       <div class="row p-5 d-flex justify-content-center">
         <div class="row mb-3">
           <h3 class="fw-bold fs-3">Dashboard</h3>
-          <p>Welcome Mrs Gift,</p>
+          <p>Welcome <span id="username"></span>,</p>
         </div>
       </div>
     </section>
@@ -95,6 +95,20 @@
     <script type="text/javascript" src="./modules/addimage.js"></script>
     <script type="text/javascript" src="./modules/png_support.js"></script>
     <script>
+      function pageLoad() {
+        document.getElementById("username").innerText =
+          localStorage.getItem("username");
+        if (localStorage.getItem("username") === "") {
+          window.location.href = "./index.html";
+        }
+      }
+      pageLoad();
+
+      function logout() {
+        localStorage.setItem("username", "");
+        window.location.href = "./index.html";
+      }
+
       let sidebar = document.querySelector(".sidebar");
       let closeBtn = document.querySelector("#btn");
       let searchBtn = document.querySelector(".bx-search");

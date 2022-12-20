@@ -96,9 +96,9 @@
                 <div class="job">Cashier</div>
               </div>
             </div>
-            <a href="/index.html"
-              ><i class="fas fa-sign-out fa-lg fa-fw" id="log_out"></i
-            ></a>
+            <p onclick="logout()">
+              <i class="fas fa-sign-out fa-lg fa-fw" id="log_out"></i>
+            </p>
           </li>
         </ul>
       </div>
@@ -462,9 +462,6 @@
     <script type="text/javascript" src="./modules/addimage.js"></script>
     <script type="text/javascript" src="./modules/png_support.js"></script>
     <script>
-      document.getElementById("username").innerText =
-        localStorage.getItem("username");
-
       let sidebar = document.querySelector(".sidebar");
       let closeBtn = document.querySelector("#btn");
       let searchBtn = document.querySelector(".bx-search");
@@ -477,6 +474,20 @@
       $(document).ready(function () {
         $(".dropdown-toggle").dropdown();
       });
+
+      function pageLoad() {
+        document.getElementById("username").innerText =
+          localStorage.getItem("username");
+        if (localStorage.getItem("username") === "") {
+          window.location.href = "./index.html";
+        }
+      }
+      pageLoad();
+
+      function logout() {
+        localStorage.setItem("username", "");
+        window.location.href = "./index.html";
+      }
     </script>
   </body>
 </html>

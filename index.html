@@ -119,6 +119,7 @@
                 <button
                   class="btn btn-primary py-2 px-5 rounded w-100 shadow-none"
                   type="submit"
+                  onclick="currentUser()"
                 >
                   Submit
                 </button>
@@ -146,6 +147,9 @@
             body: JSON.stringify(data),
           })
             .then(function (response) {
+              if (response.status == 401) {
+                document.getElementById("result").innerText = "Login failed";
+              }
               return response.json();
             })
             .then(function (response) {
@@ -158,8 +162,11 @@
               }
             });
         });
-      document.getElementById("username").innerText =
-        localStorage.getItem("username");
+
+      function currentUser() {
+        let user = document.getElementById("name").value;
+        localStorage.setItem("username", user);
+      }
     </script>
     <script type="text/javascript" src="./Scripts/popper.min.js"></script>
     <script type="text/javascript" src="./Scripts/jquery.min.js"></script>
