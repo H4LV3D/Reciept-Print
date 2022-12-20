@@ -207,8 +207,7 @@
       let old_password;
       document.getElementById("old_password").addEventListener("input", () => {
         old_password = document.getElementById("old_password").value;
-        console.log(old_password);
-        if (old_password) {
+        if (old_password.length <= 7) {
           document.getElementById("response").innerText =
             "Passwords must be atleast 8 characters";
         } else {
@@ -218,6 +217,12 @@
       let new_password;
       document.getElementById("new_password").addEventListener("input", () => {
         new_password = document.getElementById("new_password").value;
+        if (new_password.length <= 7) {
+          document.getElementById("response").innerText =
+            "Passwords must be atleast 8 characters";
+        } else {
+          document.getElementById("response").innerText = "";
+        }
       });
       let confirm_password = document.getElementById("confirm_password");
       confirm_password.addEventListener("input", () => {
@@ -229,7 +234,8 @@
         }
       });
 
-      function resetPassword() {
+      function resetPassword(e) {
+        e.preventDefault();
         let data = {
           username,
           old_password,
