@@ -148,7 +148,8 @@
           })
             .then(function (response) {
               if (response.status == 401) {
-                document.getElementById("result").innerText = "Login failed";
+                document.getElementById("result").innerText =
+                  "Incorrect Username or password";
               }
               return response.json();
             })
@@ -157,8 +158,8 @@
               if (response.success) {
                 window.location.replace("/invoice_reciept.html");
               } else {
-                document.getElementById("result").innerText = "Login failed";
-                console.log("login failed");
+                document.getElementById("result").innerText =
+                  "Incorrect Username or password";
               }
             });
         });

@@ -89,26 +89,97 @@
               This is to facilitate and enable secure and authenticated login
               process to aide for better security on this platform
             </p>
-            <button class="btn btn-secondary">Reset Password</button>
+            <button
+              class="btn btn-secondary shadow-none"
+              data-bs-toggle="modal"
+              data-bs-target="#modalId"
+            >
+              Reset Password
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="modal fade"
+        id="modalId"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="modalTitleId"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalTitleId">Password Reset</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="container-fluid px-5 pt-3 pb-5">
+              <form action="">
+                <div class="mb-2">
+                  <label for="old_password">Old Password</label>
+                  <input
+                    type="password"
+                    required
+                    autofocus
+                    class="form-control"
+                    name="old_password"
+                    id="old_password"
+                  />
+                </div>
+                <div class="mb-2">
+                  <label for="new_password">New Password</label>
+                  <input
+                    type="password"
+                    required
+                    class="form-control"
+                    name="new_password"
+                    id="new_password"
+                  />
+                </div>
+                <div class="mb-4">
+                  <label for="confirm_password">Confirm Password</label>
+                  <input
+                    type="password"
+                    required
+                    class="form-control"
+                    name="confirm_password"
+                    id="confirm_password"
+                  />
+                </div>
+                <p id="response"></p>
+                <button
+                  class="btn btn-primary w-100 py-2 shadow-none"
+                  onclick="resetPassword()"
+                >
+                  Submit!
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <script src="./script.js"></script>
     <script type="text/javascript" src="./Scripts/popper.min.js"></script>
     <script type="text/javascript" src="./Scripts/jquery.min.js"></script>
     <script src="./assets/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./Scripts/jspdf.min.js"></script>
-    <script type="text/babel" src="./Scripts/jspdf.js"></script>
-    <script type="text/javascript" src="./libs/png_support/png.js"></script>
-    <script type="text/javascript" src="./libs/png_support/zlib.js"></script>
-    <script type="text/javascript" src="./modules/addimage.js"></script>
-    <script type="text/javascript" src="./modules/png_support.js"></script>
     <script>
+      var modalId = document.getElementById("modalId");
+      modalId.addEventListener("show.bs.modal", function (event) {
+        let button = event.relatedTarget;
+        let recipient = button.getAttribute("data-bs-whatever");
+      });
+
+      let username = localStorage.getItem("username");
+
       function pageLoad() {
-        document.getElementById("username").innerText =
-          localStorage.getItem("username");
+        document.getElementById("username").innerText = username;
         if (localStorage.getItem("username") === "") {
           window.location.href = "./index.html";
         }
@@ -132,6 +203,63 @@
       $(document).ready(function () {
         $(".dropdown-toggle").dropdown();
       });
+
+      let old_password;
+      document.getElementById("old_password").addEventListener("input", () => {
+        old_password = document.getElementById("old_password").value;
+        console.log(old_password);
+        if (old_password) {
+          document.getElementById("response").innerText =
+            "Passwords must be atleast 8 characters";
+        } else {
+          document.getElementById("response").innerText = "";
+        }
+      });
+      let new_password;
+      document.getElementById("new_password").addEventListener("input", () => {
+        new_password = document.getElementById("new_password").value;
+      });
+      let confirm_password = document.getElementById("confirm_password");
+      confirm_password.addEventListener("input", () => {
+        if (new_password !== confirm_password.value) {
+          document.getElementById("response").innerText =
+            "Passwords don't match";
+        } else {
+          document.getElementById("response").innerText = "";
+        }
+      });
+
+      function resetPassword() {
+        let data = {
+          username,
+          old_password,
+          new_password,
+        };
+        fetch("http://127.0.0.1:5000/reset", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+          body: JSON.stringify(data),
+        })
+          .then(function (response) {
+            if (response.status == 401) {
+              document.getElementById("result").innerText =
+                "Passwords do not match";
+            }
+            return response.json();
+          })
+          .then(function (response) {
+            localStorage.setItem("username", response.name);
+            if (response.success) {
+              window.location.replace("/invoice_reciept.html");
+            } else {
+              document.getElementById("result").innerText =
+                "Incorrect Username or password";
+            }
+          });
+      }
     </script>
   </body>
 </html>
