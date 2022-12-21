@@ -100,17 +100,17 @@ app.get("/reciept", (req, res) => {
           function useRegex(input) {
             let series = {
               regex1:
-                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : ([A-Za-z0-9]+([A-Za-z0-9]+)+)  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0  \.  Test /i,
+                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : ([A-Za-z0-9]+([A-Za-z0-9]+)+)  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0 /i,
               regex2:
-                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : ([A-Za-z0-9]+( [A-Za-z0-9]+)+)  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : [a-zA-Z]+  Amount Paid : ([+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*))(?:[eE]([+-]?\d+))?  Outstanding : ([+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*))(?:[eE]([+-]?\d+))?  \.  Drugs,Test,Drugs/i,
+                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : ([A-Za-z0-9]+( [A-Za-z0-9]+)+)  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : [a-zA-Z]+  Amount Paid : ([+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*))(?:[eE]([+-]?\d+))?  Outstanding : ([+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*))(?:[eE]([+-]?\d+))?  /i,
               regex3:
-                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : [a-zA-Z][a-zA-Z]\s\d\d\d\d  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0  \.  Test /i,
+                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : [a-zA-Z][a-zA-Z]\s\d\d\d\d  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0  /i,
               regex4:
-                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : [a-zA-Z][a-zA-Z]\d\d\d\d  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0  \.  Test /i,
+                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : [a-zA-Z][a-zA-Z]\d\d\d\d  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0  /i,
               regex5:
-                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : [a-zA-Z][a-zA-Z]\s\d\d  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0  \.  Test /i,
+                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : [a-zA-Z][a-zA-Z]\s\d\d  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0  /i,
               regex6:
-                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : [a-zA-Z][a-zA-Z]\s\d\d\d  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0  \.  Test /i,
+                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : [a-zA-Z][a-zA-Z]\s\d\d\d  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0  /i,
             };
             if (input.match(series.regex1) === null) {
               if (input.match(series.regex2) === null) {
@@ -125,8 +125,8 @@ app.get("/reciept", (req, res) => {
             } else return input.match(series.regex1);
           }
           let info = useRegex(textPage);
-          let details;
-          // contexts.push(info);
+          contexts.push(info);
+          // let details;
           // if ((info = null)) {
           //   contexts.push(info);
           // } else {
@@ -138,7 +138,7 @@ app.get("/reciept", (req, res) => {
           //     p_amount: info[6],
           //   };
           // }
-          contexts.push(textPage);
+          // contexts.push(textPage);
           // contexts.push(details);
         });
       },
