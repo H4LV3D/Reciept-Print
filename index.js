@@ -97,49 +97,54 @@ app.get("/reciept", (req, res) => {
       function (PDFDocumentInstance) {
         var pageNumber = 1;
         getPageText(pageNumber, PDFDocumentInstance).then(function (textPage) {
-          function useRegex(input) {
-            let series = {
-              regex1:
-                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : ([A-Za-z0-9]+([A-Za-z0-9]+)+)  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0 /i,
-              regex2:
-                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : ([A-Za-z0-9]+( [A-Za-z0-9]+)+)  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : [a-zA-Z]+  Amount Paid : ([+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*))(?:[eE]([+-]?\d+))?  Outstanding : ([+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*))(?:[eE]([+-]?\d+))?  /i,
-              regex3:
-                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : [a-zA-Z][a-zA-Z]\s\d\d\d\d  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0  /i,
-              regex4:
-                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : [a-zA-Z][a-zA-Z]\d\d\d\d  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0  /i,
-              regex5:
-                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : [a-zA-Z][a-zA-Z]\s\d\d  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0  /i,
-              regex6:
-                /Life Fount Medical Center  E-Reciept  Reciept ID : ([0-9]+)  Card Number : [a-zA-Z][a-zA-Z]\s\d\d\d  Patient Name : ([a-zA-Z]+( [a-zA-Z]+)+)  Payment Method : ([a-zA-Z]+)  Amount Paid : ([0-9]+)  Outstanding : 0  /i,
-            };
-            if (input.match(series.regex1) === null) {
-              if (input.match(series.regex2) === null) {
-                if (input.match(series.regex3) === null) {
-                  if (input.match(series.regex4) === null) {
-                    if (input.match(series.regex5) === null) {
-                      return input.match(series.regex6);
-                    } else return input.match(series.regex5);
-                  } else return input.match(series.regex4);
-                } else return input.match(series.regex3);
-              } else return input.match(series.regex2);
-            } else return input.match(series.regex1);
+          function extractInformation(text) {
+            const info = {};
+            // Extract the receipt ID
+            const receiptIdRegex = /Reciept ID : (\d+)/;
+            const receiptIdMatch = text.match(receiptIdRegex);
+            if (receiptIdMatch) {
+              info.receiptId = receiptIdMatch[1];
+            }
+
+            // Extract the card number
+            const cardNumberRegex = /Card Number : (\w+)/;
+            const cardNumberMatch = text.match(cardNumberRegex);
+            if (cardNumberMatch) {
+              info.cardNumber = cardNumberMatch[1];
+            }
+
+            // Extract the patient name
+            const patientNameRegex = /Patient Name : (\w+ \w+)/;
+            const patientNameMatch = text.match(patientNameRegex);
+            if (patientNameMatch) {
+              info.patientName = patientNameMatch[1];
+            }
+
+            // Extract the payment method
+            const paymentMethodRegex = /Payment Method : (\w+)/;
+            const paymentMethodMatch = text.match(paymentMethodRegex);
+            if (paymentMethodMatch) {
+              info.paymentMethod = paymentMethodMatch[1];
+            }
+
+            // Extract the amount paid using a regular expression
+            const amountPaidRegex = /Amount Paid : (\d+)/;
+            const amountPaidMatch = amountPaidRegex.exec(text);
+            if (amountPaidMatch) {
+              info.amountPaid = amountPaidMatch[1];
+            }
+
+            // Extract the outstanding amount using a regular expression
+            const outstandingRegex = /Outstanding : (\d+)/;
+            const outstandingMatch = outstandingRegex.exec(text);
+            if (outstandingMatch) {
+              info.outstanding = outstandingMatch[1];
+            }
+
+            return info;
           }
-          let info = useRegex(textPage);
-          contexts.push(info);
-          // let details;
-          // if ((info = null)) {
-          //   contexts.push(info);
-          // } else {
-          //   details = {
-          //     RID: info[1],
-          //     Card_no: info[2],
-          //     p_name: info[3],
-          //     p_method: info[5],
-          //     p_amount: info[6],
-          //   };
-          // }
-          // contexts.push(textPage);
-          // contexts.push(details);
+          let details = extractInformation(textPage);
+          contexts.push(details);
         });
       },
       function (reason) {
