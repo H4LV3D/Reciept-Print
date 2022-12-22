@@ -111,11 +111,27 @@
           </div>
           <div class="row mb-1">
             <div class="d-flex flex-row">
-              <p class="border px-4 py-2 bg-secondary rounded me-3" id="all">
+              <p
+                class="border px-4 py-2 bg-secondary rounded me-3"
+                onclick="displayAll()"
+                id="all"
+              >
                 All
               </p>
-              <p class="btn border px-4 py-2 rounded me-3" id="all">PC</p>
-              <p class="btn border px-4 py-2 rounded me-3" id="all">FC</p>
+              <p
+                class="btn border px-4 py-2 rounded me-3"
+                onclick="showPC()"
+                id="pc"
+              >
+                PC
+              </p>
+              <p
+                class="btn border px-4 py-2 rounded me-3"
+                onclick="showFC()"
+                id="fc"
+              >
+                FC
+              </p>
             </div>
           </div>
           <div class="row mb-4">
@@ -127,13 +143,10 @@
                   id="search"
                   type="number"
                   placeholder="0000"
-                  max="10000"
                   min="0"
                   required
                   step="1"
                   autofocus
-                  autocomplete="true"
-                  aria-describedby="basic-addon1"
                 />
                 <span class="input-group-text" id="basic-addon1">
                   <i class="fas fa-search fa-sm fa-fw"></i>
@@ -142,7 +155,7 @@
             </div>
           </div>
           <div class="row mt-4">
-            <p id="reload"></p>
+            <p class="fs-5 text-danger" id="reload"></p>
             <div class="col-12 col-lg-12 col-xl-8" id="items"></div>
           </div>
         </div>
@@ -184,24 +197,44 @@
           displayAll();
         }, 5000);
 
+        function card(files) {
+          for (let index = 0; index < files.length; index++) {
+            let card = `<div class="bg-light rounded p-4 border mb-3 card">
+                                      <div class="d-flex">
+                                        <div class="col-4">
+                                          <h4>${files[index].cardNumber}</h4>
+                                          <small>${files[index].receiptId}</small>
+                                        </div>
+                                        <div class="col-8">
+                                          <small class="pb-2">INV : <span>${files[index].receiptId}</span></small>
+                                          <h5>Patient Name : <span>${files[index].patientName}</span></h5>
+                                          <h6>Amount: <span>${files[index].amountPaid}</span></h6>
+                                          <p>Payment Method : <span>${files[index].paymentMethod}</span></p>
+                                          <p>Outstanding : <span>${files[index].outstanding}</span></p>
+                                        </div>
+                                      </div>
+                                    </div>`;
+            var d1 = document.getElementById("items");
+            d1.insertAdjacentHTML("beforeend", card);
+          }
+        }
+
         function displayAll() {
-          if (allFiles === []) {
+          document.getElementById("pc").classList.remove("bg-secondary");
+          document.getElementById("fc").classList.remove("bg-secondary");
+
+          console.log(allFiles);
+
+          if (allFiles.contexts.length === 0) {
             document.getElementById("reload").innerText = "Please reload Page";
           } else {
             document.getElementById("reload").innerText = "";
           }
 
-          allFiles.fileName.sort(function (a, b) {
-            if (a > b) return 1;
-            if (a < b) return -1;
-            return 0;
-          });
-
           let filteredFiles = [];
 
           filteredFiles = allFiles.contexts;
-          document.getElementById("record").innerText =
-            allFiles.fileName.length;
+          document.getElementById("record").innerText = filteredFiles.length;
 
           const input = document.querySelector("#search");
           const items = document.querySelectorAll(".card h4");
@@ -221,29 +254,48 @@
             filteredFiles = [];
           });
 
-          function card(files) {
-            console.log(files);
-            for (let index = 0; index < files.length; index++) {
-              let card = `<div class="bg-light rounded p-4 border mb-3 card">
-                                      <div class="d-flex">
-                                        <div class="col-4">
-                                          <h4>${files[index].cardNumber}</h4>
-                                          <small>${files[index].receiptId}</small>
-                                        </div>
-                                        <div class="col-8">
-                                          <small class="pb-2">INV : <span>${files[index].receiptId}</span></small>
-                                          <h5>Patient Name : <span>${files[index].patientName}</span></h5>
-                                          <h6>Amount: <span>${files[index].amountPaid}</span></h6>
-                                          <p>Payment Method : <span>${files[index].paymentMethod}</span></p>
-                                          <p>Outstanding : <span>${files[index].outstanding}</span></p>
-                                        </div>
-                                      </div>
-                                    </div>`;
-              var d1 = document.getElementById("items");
-              d1.insertAdjacentHTML("beforeend", card);
-            }
-          }
+          card(filteredFiles);
+        }
 
+        function showPC() {
+          document.getElementById("all").classList.remove("bg-secondary");
+          document.getElementById("fc").classList.remove("bg-secondary");
+          document.getElementById("pc").classList.add("bg-secondary");
+
+          filteredFiles = [];
+          const container = document.getElementById("items");
+          container.textContent = "";
+
+          allFiles.contexts.forEach((item) => {
+            if (item.cardNumber.includes("PC")) {
+              filteredFiles.push(item);
+            } else {
+              // filteredFiles.push(item);
+              // console.log(item.cardNumber);
+              return 0;
+            }
+          });
+          card(filteredFiles);
+        }
+
+        function showFC() {
+          document.getElementById("all").classList.remove("bg-secondary");
+          document.getElementById("pc").classList.remove("bg-secondary");
+          document.getElementById("fc").classList.add("bg-secondary");
+
+          filteredFiles = [];
+          const container = document.getElementById("items");
+          container.textContent = "";
+
+          allFiles.contexts.forEach((item) => {
+            if (item.cardNumber.includes("FC")) {
+              filteredFiles.push(item);
+            } else {
+              // filteredFiles.push(item);
+              // console.log(item.cardNumber);
+              return 0;
+            }
+          });
           card(filteredFiles);
         }
       </script>

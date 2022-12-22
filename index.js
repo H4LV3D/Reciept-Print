@@ -65,15 +65,11 @@ app.get("/reciept", (req, res) => {
   const files = fs
     .readdirSync(folderPath)
     .filter((file) => file.endsWith(".pdf"));
-  console.log(files);
 
-  let fileName = [];
   let contexts = [];
 
   files.forEach(async (file) => {
     const filePath = path.join(folderPath, file);
-
-    fileName.push(file.replace(/\.[^/.]+$/, ""));
 
     function getPageText(pageNum, PDFDocumentInstance) {
       return new Promise(function (resolve, reject) {
@@ -92,8 +88,7 @@ app.get("/reciept", (req, res) => {
     }
 
     let PDF_URL = filePath;
-
-    let text = pdfjs.getDocument(PDF_URL).promise.then(
+    pdfjs.getDocument(PDF_URL).promise.then(
       function (PDFDocumentInstance) {
         var pageNumber = 1;
         getPageText(pageNumber, PDFDocumentInstance).then(function (textPage) {
@@ -106,11 +101,17 @@ app.get("/reciept", (req, res) => {
               info.receiptId = receiptIdMatch[1];
             }
 
+            function convertToUppercaseAndRemoveSpaces(str) {
+              return str.toUpperCase().replace(/ /g, "");
+            }
+
             // Extract the card number
             const cardNumberRegex = /Card Number : (\w+)/;
             const cardNumberMatch = text.match(cardNumberRegex);
             if (cardNumberMatch) {
-              info.cardNumber = cardNumberMatch[1];
+              info.cardNumber = convertToUppercaseAndRemoveSpaces(
+                cardNumberMatch[1]
+              );
             }
 
             // Extract the patient name
@@ -155,7 +156,6 @@ app.get("/reciept", (req, res) => {
 
   setTimeout(() => {
     res.status(200).json({
-      fileName,
       contexts,
     });
   }, 1500);
