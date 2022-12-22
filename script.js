@@ -6,6 +6,10 @@ document.getElementById("today").innerText = date;
 
 localStorage.setItem("patientNo", 01);
 
+function convertToUppercaseAndRemoveSpaces(str) {
+  return str.toUpperCase().replace(/ /g, "");
+}
+
 function clickme() {
   let cardno = document.getElementById("cardno");
   let p_name = document.getElementById("p_name");
@@ -22,7 +26,7 @@ function clickme() {
 
   p_outstanding = p_total.value - p_paid.value;
   outstand.value = p_outstanding;
-  r_cardno.innerText = cardno.value;
+  r_cardno.innerText = convertToUppercaseAndRemoveSpaces(cardno.value);
   r_name.innerText = p_name.value;
   r_paid.innerText = p_paid.value;
   r_out.innerText = p_outstanding;
@@ -53,12 +57,16 @@ function onChange(e) {
   return text;
 }
 
-let checkboxes = document.getElementsByName("check");
-let checked = [];
+let checkboxValues = [];
 function newed(id) {
-  let me = document.getElementById(id);
-  if (me.checked) {
-    checked.push(me.value);
+  let paymentReason = document.getElementById(id);
+  if (paymentReason.checked) {
+    checkboxValues.push(paymentReason.value);
+  } else {
+    const index = checkboxValues.indexOf(paymentReason.value);
+    if (index > -1) {
+      checkboxValues.splice(index, 1);
+    }
   }
 }
 
@@ -74,20 +82,29 @@ function printme() {
     today.getDate() +
     `${localStorage.getItem("patientNo")}`;
   r_date.innerText = dates;
-
   let cardno = document.getElementById("cardno");
+
   var doc = new jsPDF();
-  function saveDiv(title) {
-    doc.fromHTML(
-      `<html><head><title>${title}</title></head><body>` +
-        document.getElementById("print").innerHTML +
-        `${checked}` +
-        `</body></html>`
-    );
-    doc.save(`${cardno.value}.pdf`);
+  function saveDiv() {
+    let imageData = new Image();
+    imageData.src = "./logo.png";
+    imageData.onload = () => {
+      // doc.addImage(imageData, "PNG", 0, 0, 60, 60);
+      let toPrint = document.getElementById("print");
+      doc.fromHTML(
+        toPrint,
+        0,
+        0,
+        {
+          width: 100,
+        },
+        function () {
+          doc.save(`${cardno.value}.pdf`);
+        }
+      );
+    };
   }
-  let Reciept = "reciept";
-  saveDiv(Reciept);
+  saveDiv();
 }
 
 // TIME

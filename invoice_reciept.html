@@ -331,7 +331,10 @@
                     </div>
                   </div>
                 </form>
-                <button class="btn btn-md btn-secondary" onclick="clickme()">
+                <button
+                  class="btn btn-md btn-secondary shadow-none"
+                  onclick="clickme()"
+                >
                   Generate
                 </button>
               </div>
@@ -439,7 +442,7 @@
                   </div>
                 </div>
                 <button
-                  class="btn btn-md btn-primary"
+                  class="btn btn-md btn-primary shadow-none"
                   id="button"
                   onclick="printme()"
                 >
@@ -462,6 +465,12 @@
     <script type="text/javascript" src="./modules/addimage.js"></script>
     <script type="text/javascript" src="./modules/png_support.js"></script>
     <script>
+      document.getElementById("cardno").addEventListener("input", () => {
+        document.title = `LFMC RECIEPT | ${
+          document.getElementById("cardno").value
+        }`;
+      });
+
       let sidebar = document.querySelector(".sidebar");
       let closeBtn = document.querySelector("#btn");
       let searchBtn = document.querySelector(".bx-search");
