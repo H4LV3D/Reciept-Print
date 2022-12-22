@@ -142,6 +142,7 @@
             </div>
           </div>
           <div class="row mt-4">
+            <p id="reload"></p>
             <div class="col-12 col-lg-12 col-xl-8" id="items"></div>
           </div>
         </div>
@@ -184,18 +185,24 @@
         }, 5000);
 
         function displayAll() {
-          console.log(allFiles);
+          if (allFiles === []) {
+            document.getElementById("reload").innerText = "Please reload Page";
+          } else {
+            document.getElementById("reload").innerText = "";
+          }
+
           allFiles.fileName.sort(function (a, b) {
             if (a > b) return 1;
             if (a < b) return -1;
             return 0;
           });
 
-          console.log(allFiles);
           let filteredFiles = [];
-          filteredFiles = allFiles.fileName;
-          let record = allFiles.fileName.length;
-          document.getElementById("record").innerText = record;
+
+          filteredFiles = allFiles.contexts;
+          document.getElementById("record").innerText =
+            allFiles.fileName.length;
+
           const input = document.querySelector("#search");
           const items = document.querySelectorAll(".card h4");
 
@@ -203,8 +210,8 @@
             const container = document.getElementById("items");
             container.textContent = "";
             let value = input.value.toLowerCase();
-            allFiles.fileName.forEach((item) => {
-              if (item.includes(value)) {
+            allFiles.contexts.forEach((item) => {
+              if (item.cardNumber.includes(value)) {
                 filteredFiles.push(item);
               } else {
                 // filteredFiles.push(item);
@@ -215,21 +222,23 @@
           });
 
           function card(files) {
+            console.log(files);
             for (let index = 0; index < files.length; index++) {
               let card = `<div class="bg-light rounded p-4 border mb-3 card">
-                                    <div class="d-flex">
-                                      <div class="col-4">
-                                        <h4>${files[index]}</h4>
-                                        <small>26-05-2022</small>
+                                      <div class="d-flex">
+                                        <div class="col-4">
+                                          <h4>${files[index].cardNumber}</h4>
+                                          <small>${files[index].receiptId}</small>
+                                        </div>
+                                        <div class="col-8">
+                                          <small class="pb-2">INV : <span>${files[index].receiptId}</span></small>
+                                          <h5>Patient Name : <span>${files[index].patientName}</span></h5>
+                                          <h6>Amount: <span>${files[index].amountPaid}</span></h6>
+                                          <p>Payment Method : <span>${files[index].paymentMethod}</span></p>
+                                          <p>Outstanding : <span>${files[index].outstanding}</span></p>
+                                        </div>
                                       </div>
-                                      <div class="col-8">
-                                        <small class="pb-2">INV : <span></span></small>
-                                        <h5>Patient Name : <span></span></h5>
-                                        <h6>Amount: <span></span></h6>
-                                        <p>Payment Method : <span></span></p>
-                                      </div>
-                                    </div>
-                                  </div>`;
+                                    </div>`;
               var d1 = document.getElementById("items");
               d1.insertAdjacentHTML("beforeend", card);
             }
