@@ -30,7 +30,7 @@ const database = {
   },
   user2: {
     username: "gifted",
-    name: "Mrs gift",
+    name: "Egenti",
     password: "$2b$10$Ef/pz1kYgJf9X1/GRsO0Ce1vTQArq.3muVagNTvxIbgpZLaIVlOZ2",
   },
 };
