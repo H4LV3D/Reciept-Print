@@ -18,7 +18,6 @@ app.use(
   })
 );
 
-// Use body-parser middleware to parse request bodies
 app.use(express.json());
 app.use(bodyParser.json());
 
