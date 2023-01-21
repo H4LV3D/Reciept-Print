@@ -1,28 +1,18 @@
 {
-  "name": "reciept-print",
+  "name": "server",
   "version": "1.0.0",
-  "description": "This project is designed to eliminate a paper reciept system and create a more digital solution for comapnies and saves leaves a digital trail to follow, monitor and have full control of the digital system.",
-  "main": "file_read.js",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/H4LV3D/Reciept-Print.git"
+    "start": "nodemon index.js",
+    "dev": "node index.js"
   },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/H4LV3D/Reciept-Print/issues"
-  },
-  "homepage": "https://github.com/H4LV3D/Reciept-Print#readme",
   "dependencies": {
-    "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "jsdom": "^20.0.3",
-    "pdfjs": "^2.4.7",
-    "pdfjs-dist": "^3.1.81"
+    "mongoose": "^6.8.4"
   }
 }
