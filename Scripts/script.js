@@ -4,7 +4,7 @@ var date =
 document.getElementById("date").value = date;
 document.getElementById("today").innerText = date;
 
-localStorage.setItem("patientNo", 01);
+localStorage.setItem("patientNo", "01");
 
 function convertToUppercaseAndRemoveSpaces(str) {
   return str.toUpperCase().replace(/ /g, "");
