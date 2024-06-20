@@ -7,20 +7,20 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <link
-      href="./assets/bootstrap-5.0.2-dist/css/bootstrap.min.css"
+      href="../assets/bootstrap-5.0.2-dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./index.css" />
+    <link rel="stylesheet" href="../index.css" />
     <link
-      href="./assets/fontawesome-free-6.2.1-web/css/fontawesome.css"
-      rel="stylesheet"
-    />
-    <link
-      href="./assets/fontawesome-free-6.2.1-web/css/brands.css"
+      href="../assets/fontawesome-free-6.2.1-web/css/fontawesome.css"
       rel="stylesheet"
     />
     <link
-      href="./assets/fontawesome-free-6.2.1-web/css/solid.css"
+      href="../assets/fontawesome-free-6.2.1-web/css/brands.css"
+      rel="stylesheet"
+    />
+    <link
+      href="../assets/fontawesome-free-6.2.1-web/css/solid.css"
       rel="stylesheet"
     />
 
@@ -31,13 +31,54 @@
           visibility: hidden;
           margin: 0px !important;
           padding: 0px !important;
-          width: 100% !important;
+          font-family: Arial, Helvetica, sans-serif !important;
         }
+
+        body {
+          width: 0px !important;
+        }
+
+        .sidebar {
+          display: none !important;
+        }
+
+        .main-body {
+          background: #fff;
+          top: 0 !important;
+          left: 0px !important;
+          width: 100% !important;
+          color: #000 !important;
+        }
+
         #printDoc {
           display: none;
         }
+
+        #card {
+          padding: 0 !important;
+          margin: 0 !important;
+          border: 1px solid #000 !important;
+        }
+
+        #button {
+          display: none;
+        }
+
+        #printContainer {
+          display: block !important;
+          width: 100% !important;
+          height: 100% !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          border: 1px solid #000 !important;
+        }
+
         #print {
-          height: 400px !important;
+          visibility: visible;
+          margin: 0px !important;
+          width: 180px !important;
+          height: 600px !important;
+          /* border: 1px solid black !important; */
         }
         #print img {
           width: 60px !important;
@@ -342,17 +383,18 @@
           </div>
           <div
             class="col-lg-6 p-5 d-flex justify-content-center align-items-center"
+            id="printContainer"
           >
             <div class="col-9 col-md-10 col-lg-7">
               <div class="card p-4" id="card">
                 <div id="print">
                   <div class="card-head text-center">
-                    <img
-                      src="logo.png"
+                    <!-- <img
+                      src="../assets/logo.png"
                       alt="LOGO"
                       class="px-auto"
                       style="width: 60px"
-                    />
+                    /> -->
                     <h3 class="text-center fs-5 m-0 p-0">
                       LIFE FOUNT MEDICAL CENTRE
                     </h3>
@@ -394,7 +436,7 @@
                     </div>
                   </div>
                   <hr />
-                  <div class="card-body mt-3">
+                  <div class="card-body mt-3" id="middle">
                     <div class="mb-3">
                       <p class="form-label">
                         Card Number : <span id="r_cardno"></span>
@@ -454,16 +496,16 @@
         </div>
       </section>
     </div>
-    <script src="./script.js"></script>
-    <script type="text/javascript" src="./Scripts/popper.min.js"></script>
-    <script type="text/javascript" src="./Scripts/jquery.min.js"></script>
-    <script src="./assets/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./Scripts/jspdf.min.js"></script>
-    <script type="text/babel" src="./Scripts/jspdf.js"></script>
-    <script type="text/javascript" src="./libs/png_support/png.js"></script>
-    <script type="text/javascript" src="./libs/png_support/zlib.js"></script>
-    <script type="text/javascript" src="./modules/addimage.js"></script>
-    <script type="text/javascript" src="./modules/png_support.js"></script>
+    <script src="../Scripts/script.js"></script>
+    <script type="text/javascript" src="../Scripts/popper.min.js"></script>
+    <script type="text/javascript" src="../Scripts/jquery.min.js"></script>
+    <script src="../assets/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../Scripts/jspdf.min.js"></script>
+    <script type="text/babel" src="../Scripts/jspdf.js"></script>
+    <script type="text/javascript" src="../libs/png_support/png.js"></script>
+    <script type="text/javascript" src="../libs/png_support/zlib.js"></script>
+    <script type="text/javascript" src="../modules/addimage.js"></script>
+    <script type="text/javascript" src="../modules/png_support.js"></script>
     <script>
       document.getElementById("cardno").addEventListener("input", () => {
         document.title = `LFMC RECIEPT | ${

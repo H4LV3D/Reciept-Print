@@ -71,46 +71,58 @@ function newed(id) {
 }
 
 function printme() {
-  if (cardno.value === "" || p_name.value === "" || p_paid.value === "") {
-    alert("Enter card Number or patient Name or Amount Paid");
-    return 0;
-  } else {
-    window.print();
-    patient++;
-    localStorage.setItem("patientNo", patient);
-    let r_date = document.getElementById("r_date");
-    let dates =
-      today.getFullYear() +
-      "0" +
-      (today.getMonth() + 1) +
-      today.getDate() +
-      `${localStorage.getItem("patientNo")}`;
-    r_date.innerText = dates;
-    let cardno = document.getElementById("cardno");
+  // if (cardno.value === "" || p_name.value === "" || p_paid.value === "") {
+  //   alert("Enter card Number or patient Name or Amount Paid");
+  //   return 0;
+  // } else {
+  window.print();
+  patient++;
+  localStorage.setItem("patientNo", patient);
+  let r_date = document.getElementById("r_date");
+  let dates =
+    today.getFullYear() +
+    "0" +
+    (today.getMonth() + 1) +
+    today.getDate() +
+    `${localStorage.getItem("patientNo")}`;
+  r_date.innerText = dates;
+  let cardno = document.getElementById("cardno");
 
-    var doc = new jsPDF();
-    function saveDiv() {
-      let imageData = new Image();
-      imageData.src = "./logo.png";
-      imageData.onload = () => {
-        // doc.addImage(imageData, "PNG", 0, 0, 60, 60);
-        let toPrint = document.getElementById("print");
-        doc.fromHTML(
-          toPrint,
-          0,
-          0,
-          {
-            width: 100,
-          },
-          function () {
-            doc.save(`${cardno.value}.pdf`);
-          }
-        );
-      };
-    }
+  //   var doc = new jsPDF();
+  //   function saveDiv() {
+  //     let imageData = new Image();
+  //     imageData.src = "./logo.png";
+  //     imageData.onload = () => {
+  //       // doc.addImage(imageData, "PNG", 0, 0, 60, 60);
+  //       let toPrint = document.getElementById("print");
+  //       doc.fromHTML(
+  //         toPrint,
+  //         0,
+  //         0,
+  //         {
+  //           width: 100,
+  //         },
+  //         function () {
+  //           doc.save(`${cardno.value}.pdf`);
+  //         }
+  //       );
+  //     };
+  //   }
+  // }
+  // saveDiv();
+  var doc = new jsPDF();
+  function saveDiv(title) {
+    doc.fromHTML(
+      `<html><head><title>${title}</title></head><body>` +
+        document.getElementById("print").innerHTML +
+        `</body></html>`
+    );
+    doc.save(`${cardno.value}.pdf`);
   }
-  saveDiv();
+  let Reciept = "reciept";
+  saveDiv(Reciept);
 }
+// }
 
 // TIME
 function currentTime() {
