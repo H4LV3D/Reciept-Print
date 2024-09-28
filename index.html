@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link
+      href="./assets/bootstrap-5.0.2-dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./index.css" />
+    <link
+      href="./assets/fontawesome-free-6.2.1-web/css/fontawesome.css"
+      rel="stylesheet"
+    />
+    <link
+      href="./assets/fontawesome-free-6.2.1-web/css/brands.css"
+      rel="stylesheet"
+    />
+    <link
+      href="./assets/fontawesome-free-6.2.1-web/css/solid.css"
+      rel="stylesheet"
+    />
+    <title>LFMC RECIEPT</title>
+  </head>
+  <body>
+    <div class="row d-flex justify-content-center align-items-center vh-100">
+      <div class="card rounded p-5 shadow mx-auto my-auto" style="width: 24rem">
+        <div class="card-head">
+          <h4 class="p-0 m-0">LFMC RECIEPT</h4>
+          <small class="p-0 m-0">Cashier login.</small>
+          <hr />
+        </div>
+        <form id="login-form">
+          <div class="mb-3">
+            <label for="" class="form-label">Username</label>
+            <input
+              type="text"
+              class="form-control"
+              name="Username"
+              id="username"
+              aria-describedby="helpId"
+              placeholder="Johnson"
+              required
+              autofocus
+            />
+          </div>
+          <div class="">
+            <label for="" class="form-label">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              name="Password"
+              id="password"
+              placeholder=""
+              required
+            />
+          </div>
+          <div class="d-flex justify-content-end">
+            <small class="pt-2">Forgot Password?</small>
+          </div>
+          <div class="text-danger text-center" id="result"></div>
+          <button
+            type="submit"
+            class="btn btn-primary w-100 mt-3 roundeed shadow-none"
+          >
+            Submit
+          </button>
+        </form>
+        <div>
+          <div class="py-2">
+            <p
+              class="text-decoration-none text-black login_link"
+              data-bs-target="#exampleModalToggle"
+              data-bs-toggle="modal"
+            >
+              Extra Duty? Click here...
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="exampleModalToggle"
+      aria-hidden="true"
+      aria-labelledby="exampleModalToggleLabel"
+      tabindex="-1"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalToggleLabel">Extra Duty</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body p-5">
+            <form action="./invoice_reciept.html">
+              <label for="name">Enter Student/Staff Name</label>
+              <input
+                type="text"
+                class="form-control mb-4"
+                id="name"
+                placeholder="Name"
+                autofocus
+                required
+              />
+              <a
+                href="./invoice_reciept.html"
+                class="d-flex justify-content-end w-100"
+              >
+                <button
+                  class="btn btn-primary py-2 px-5 rounded w-100 shadow-none"
+                  type="submit"
+                  onclick="currentUser()"
+                >
+                  Submit
+                </button>
+              </a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          var username = document.getElementById("username").value;
+          var password = document.getElementById("password").value;
+          const data = { username, password };
+          fetch("http://127.0.0.1:5000/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+            body: JSON.stringify(data),
+          })
+            .then(function (response) {
+              if (response.status == 401) {
+                document.getElementById("result").innerText =
+                  "Incorrect Username or password";
+              }
+              return response.json();
+            })
+            .then(function (response) {
+              localStorage.setItem("username", response.name);
+              if (response.success) {
+                window.location.replace("/invoice_reciept.html");
+              } else {
+                document.getElementById("result").innerText =
+                  "Incorrect Username or password";
+              }
+            });
+        });
+
+      function currentUser() {
+        let user = document.getElementById("name").value;
+        localStorage.setItem("username", user);
+      }
+    </script>
+    <script type="text/javascript" src="./Scripts/popper.min.js"></script>
+    <script type="text/javascript" src="./Scripts/jquery.min.js"></script>
+    <script src="./assets/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
