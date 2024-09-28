@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0;
+    /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+    /* Firefox */
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+
+@media print {
+    * {
+        visibility: hidden;
+        margin: 0px !important;
+        padding: 0px !important;
+        width: 100% !important;
+    }
+
+    #printDoc {
+        display: none;
+    }
+
+    #print {
+        height: 400px !important;
+    }
+
+    #print img {
+        width: 60px !important;
+        height: 60px !important;
+    }
+
+    #print * {
+        visibility: visible;
+        print-color-adjust: exact !important;
+        -webkit-print-color-adjust: exact !important;
+        text-align: left;
+        font-size: 12px !important;
+        padding: 0px 2px !important;
+        margin-bottom: 8px !important;
+    }
+}
