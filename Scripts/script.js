@@ -70,12 +70,24 @@ function newed(id) {
   }
 }
 
+function printPage() {
+  var printHTML = window.open("", "PRINT", "");
+  printHTML.document.write("<html><body>");
+  printHTML.document.write(document.getElementById("print").innerHTML);
+  printHTML.document.write("</body></html>");
+  printHTML.focus();
+  printHTML.print();
+  printHTML.close();
+  return true;
+}
+
 function printme() {
   // if (cardno.value === "" || p_name.value === "" || p_paid.value === "") {
   //   alert("Enter card Number or patient Name or Amount Paid");
   //   return 0;
   // } else {
   window.print();
+  // printPage();
   patient++;
   localStorage.setItem("patientNo", patient);
   let r_date = document.getElementById("r_date");
@@ -119,6 +131,8 @@ function printme() {
     );
     doc.save(`${cardno.value}.pdf`);
   }
+  let Reciept = "reciept";
+  saveDiv(Reciept);
   let Reciept = "reciept";
   saveDiv(Reciept);
 }

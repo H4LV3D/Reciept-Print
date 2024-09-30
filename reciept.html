@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link href="./assets/bootstrap-5.0.2-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./index.css" />
+    <link href="./assets/fontawesome-free-6.2.1-web/css/fontawesome.css" rel="stylesheet" />
+    <link href="./assets/fontawesome-free-6.2.1-web/css/brands.css" rel="stylesheet" />
+    <link href="./assets/fontawesome-free-6.2.1-web/css/solid.css" rel="stylesheet" />
+
+    <title>LFMC RECIEPT</title>
+    <style>
+        @media print {
+            * {
+                visibility: visible;
+                margin: 0px !important;
+                padding: 0px !important;
+                font-family: Arial, Helvetica, sans-serif !important;
+            }
+
+            body {
+                width: 0px !important;
+            }
+
+            .sidebar {
+                display: none !important;
+            }
+
+            #printDoc {
+                display: none;
+            }
+
+            #button {
+                display: none;
+            }
+
+            /* .main-body {
+        background: #fff;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        color: #000 !important;
+      } */
+
+            #card {
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            /* #printContainer {
+                display: block !important;
+                width: auto !important;
+                height: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                border: 1px solid #000 !important;
+            } */
+
+            #print {
+                display: block !important;
+                visibility: visible !important;
+                margin: 0 !important;
+                width: 180px !important;
+                height: 300px !important;
+                padding: 0 !important;
+            }
+
+            #print img {
+                width: 50px !important;
+                height: 50px !important;
+            }
+
+            #print * {
+                color: #000 !important;
+                visibility: visible;
+                print-color-adjust: exact !important;
+                -webkit-print-color-adjust: exact !important;
+                font-size: 12px !important;
+                font-family: Arial, Helvetica, sans-serif !important;
+                padding: 0px !important;
+                margin: 0px !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="main-body vh-100 w-100 mx-auto">
+        <div class="row d-flex justify-content-center align-items-center" id="cover">
+            <div class="col-lg-6 p-5 d-flex justify-content-center align-items-center" id="printContainer">
+                <div class="col-12 col-md-10 col-lg-9">
+                    <div class="card p-4" id="card">
+                        <img src="logo.png" alt="LOGO" class="px-auto" style="width: 50px" />
+                        <div class="" id="print">
+                            <div class="card-head text-center">
+                                <h3 class="text-center fs-5 m-0 p-0">
+                                    LIFE FOUNT MEDICAL CENTRE
+                                </h3>
+                                <p class="text-center fs-6 m-0 p-0">CARE AT IT'S BEST!</p>
+                                <p class="text-center p-0 m-0 mt-3">
+                                    NO. 103, MOSHALASHI RD, EGAN
+                                </p>
+                                <p class="text-center p-0 m-0">IGANDO, LAGOS.</p>
+                                <p class="text-center p-0 m-0">TEL : 08033337117</p>
+                                <hr />
+                            </div>
+                            <div class="" id="middle">
+                                <div class="py-2 px-4">
+                                    <div class="row d-flex">
+                                        <div class="col m-0 p-0">
+                                            <p class="form-label p-0 m-0">
+                                                INV : <span id="r_date"></span>
+                                            </p>
+                                        </div>
+                                        <div class="col m-0 p-0">
+                                            <p class="form-label p-0 m-0">
+                                                CASHIER : <span id="username"></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row d-flex">
+                                        <div class="col m-0 p-0">
+                                            <p class="form-label p-0 m-0">
+                                                DATE :
+                                                <span id="today"></span>
+                                            </p>
+                                        </div>
+                                        <div class="col m-0 p-0">
+                                            <p class="form-label p-0 m-0">
+                                                TIME :
+                                                <span id="time"></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="card-body mt-3 py-4">
+                                    <div class="mb-3">
+                                        <p class="form-label">
+                                            Card Number : <span id="r_cardno"></span>
+                                        </p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <p class="form-label">
+                                            Patient Name : <span id="r_name"></span>
+                                        </p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <p class="form-label">
+                                            Payment Method : <span id="r_pay">Cash</span>
+                                        </p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <p class="form-label">
+                                            Amount Paid : <span id="r_paid">#0</span>
+                                        </p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <p class="form-p">
+                                            Outstanding : <span id="r_out">#0</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer text-center my-2 bg-white">
+                                <div class="opening my-2">
+                                    <p class="fs-6 p-0 m-0 text-center">OPENING HOURS</p>
+                                    <p class="fw-normal p-0 m-0 text-center">
+                                        Monday - Sunday : 24/7
+                                    </p>
+                                </div>
+                                <div class="opening my-2">
+                                    <p class="fs-6 p-0 m-0 text-center">FOR MORE INFO</p>
+                                    <p class="fw-normal p-0 m-0 text-center">
+                                        Visit www.lifefountmedical.com
+                                    </p>
+                                    <p class="fw-normal p-0 m-0 text-center">
+                                        Call 08033337117
+                                    </p>
+                                </div>
+                                <br />
+                                <p class="text-center">CARE AT IT'S BEST</p>
+                                <p class="pt5">.</p>
+                            </div>
+                        </div>
+                        <button class="btn btn-md btn-primary shadow-none printBtn" id="button" onclick="printme()">
+                            Print
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="./script.js"></script>
+    <script type="text/javascript" src="./Scripts/popper.min.js"></script>
+    <script type="text/javascript" src="./Scripts/jquery.min.js"></script>
+    <script src="./assets/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./Scripts/jspdf.min.js"></script>
+    <script type="text/javascript" src="./Scripts/jspdf.js"></script>
+    <script>
+        document.getElementById("cardno").addEventListener("input", () => {
+            document.title = `LFMC RECIEPT | ${document.getElementById("cardno").value
+                }`;
+        });
+
+        document.getElementById("cashier").innerText =
+            localStorage.getItem("username");
+
+        let sidebar = document.querySelector(".sidebar");
+        let closeBtn = document.querySelector("#btn");
+        let searchBtn = document.querySelector(".bx-search");
+        let button = document.querySelector(".fa-stream");
+
+        closeBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("open");
+            $(button).toggleClass("fa-stream fa-times-square");
+        });
+        $(document).ready(function () {
+            $(".dropdown-toggle").dropdown();
+        });
+
+        function pageLoad() {
+            document.getElementById("username").innerText =
+                localStorage.getItem("username");
+            if (localStorage.getItem("username") === "") {
+                window.location.href = "./index.html";
+            }
+        }
+        pageLoad();
+
+        function logout() {
+            localStorage.setItem("username", "");
+            window.location.href = "./index.html";
+        }
+    </script>
+</body>
+
+</html>

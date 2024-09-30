@@ -1,105 +1,171 @@
-import fs from "fs";
-import path from "path";
-import pdfjsLib from "pdfjs-dist";
-import XLSX from "xlsx";
-import "web-streams-polyfill"; // Import the polyfill
+const express = require("express");
+const bcrypt = require("bcrypt");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const path = require("path");
+const pdfjs = require("pdfjs-dist/build/pdf.js");
+// const pdfjs = require("pdfjs-dist/es5/build/pdf.js");
+const fs = require("fs");
 
-const directoryPath = "./"; // Replace with the path to your directory
+const app = express();
+app.use(
+  cors({
+    methods: ["GET", "POST"],
+    origin: ["http://localhost:5500", "http://127.0.0.1:5500", "index.html"],
+    credentials: true,
+    optionSuccessStatus: 200,
+  })
+);
 
-async function extractText(dataBuffer) {
-  const loadingTask = pdfjsLib.getDocument(dataBuffer);
-  const pdf = await loadingTask.promise;
-  const page = await pdf.getPage(1);
-  const pageText = await page.getTextContent();
-  const pageStrings = pageText.items.map((item) => item.str);
-  return pageStrings.join("\n");
-}
+// Use body-parser middleware to parse request bodies
+app.use(express.json());
+app.use(bodyParser.json());
 
-export async function returnRawData(file) {
-  if (path.extname(file) === ".pdf") {
-    const pdfPath = path.join(directoryPath, file);
-    const dataBuffer = fs.readFileSync(pdfPath);
-    const uint8Array = new Uint8Array(dataBuffer); // Convert Buffer to Uint8Array
-    return await extractText(uint8Array);
-  } else {
-    throw new Error("File format is not supported. Please provide a PDF file.");
-  }
-}
-
-// Function to extract information from the data
-const extractInformation = (data) => {
-  const idMatch = data.match(/Reciept ID : (\d+)/);
-  const cardNumberMatch = data.match(/Card Number : (\w+)/);
-  const nameMatch = data.match(/Patient Name : (.+?)(?=\n)/);
-  const paymentMethodMatch = data.match(/Payment Method : (.+?)(?=\n)/);
-  const amountPaidMatch = data.match(/Amount Paid : (\d+)/);
-  const outstandingMatch = data.match(/Outstanding : (\d+)/);
-
-  const extractedData = {
-    id: idMatch ? idMatch[1] : null,
-    cardNumber: cardNumberMatch ? cardNumberMatch[1] : null,
-    name: nameMatch ? nameMatch[1] : null,
-    paymentMethod: paymentMethodMatch ? paymentMethodMatch[1] : null,
-    amountPaid: amountPaidMatch ? amountPaidMatch[1] : null,
-    outstanding: outstandingMatch ? outstandingMatch[1] : null,
-  };
-
-  return extractedData;
+const database = {
+  user1: {
+    username: "blessing",
+    name: "Nwabudo",
+    password: "$2b$10$s703D.RXt/vp5bAWtKBNNeGvYXMzqO2SSHYQo2vC/HJEPL5HaHJcK",
+  },
+  user2: {
+    username: "gift",
+    name: "Egenti",
+    password: "$2b$10$Ef/pz1kYgJf9X1/GRsO0Ce1vTQArq.3muVagNTvxIbgpZLaIVlOZ2",
+  },
 };
 
-// Modified returnJson function
-export async function returnJson(file) {
-  const text = await returnRawData(file);
-  const formattedData = extractInformation(text);
-  const jsonData = { data: formattedData };
-  return jsonData;
-}
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
 
-export async function returnExcel(file) {
-  const jsonData = await returnJson(file);
-
-  const worksheet = XLSX.utils.json_to_sheet([jsonData]);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-  const excelOutput = XLSX.write(workbook, {
-    bookType: "xlsx",
-    type: "buffer",
-  });
-  return excelOutput;
-}
-
-export async function processAllFiles() {
-  const rawDataArray = [];
-  const jsonDataArray = [];
-  const excelDataArray = [];
-
-  const files = fs.readdirSync(directoryPath);
-  for (const file of files) {
-    try {
-      const rawData = await returnRawData(file);
-      const jsonData = await returnJson(file);
-      const excelData = await returnExcel(file);
-
-      rawDataArray.push({ file, data: rawData });
-      jsonDataArray.push({ file, data: jsonData });
-      excelDataArray.push({ file, data: excelData });
-    } catch (err) {
-      console.error("Error processing the file:", file, err);
-    }
+  if (username === "blessing" || username === "gift") {
+    let user = username === "blessing" ? database.user1 : database.user2;
+    const hashedPassword = bcrypt.hash(password, 10);
+    bcrypt.compare(password, user.password, (err, response) => {
+      if (response) {
+        res.status(200).json({
+          success: `Welcome Home`,
+          name: user.name,
+        });
+      } else {
+        res.status(401).json({
+          failed: "Invalid Username or Password",
+        });
+      }
+    });
+  } else {
+    res.status(401).send("Invalid username");
   }
+});
 
-  // Writing the entire data to a single file
-  fs.writeFileSync("index.raw", JSON.stringify(rawDataArray, null, 2));
-  fs.writeFileSync("index.json", JSON.stringify(jsonDataArray, null, 2));
-  fs.writeFileSync("index.xlsx", JSON.stringify(excelDataArray, null, 2));
+app.get("/reciept", (req, res) => {
+  const folderPath = path.join(__dirname, "Reciept");
+  const files = fs
+    .readdirSync(folderPath)
+    .filter((file) => file.endsWith(".pdf"));
 
-  return {
-    rawData: rawDataArray,
-    jsonData: jsonDataArray,
-    excelData: excelDataArray,
-  };
-}
+  let contexts = [];
 
-processAllFiles();
+  files.forEach(async (file) => {
+    const filePath = path.join(folderPath, file);
 
-// convert pdf files to excel, raw and json formats and save them in the same directory for further processing and analysis of data.
+    function getPageText(pageNum, PDFDocumentInstance) {
+      return new Promise(function (resolve, reject) {
+        PDFDocumentInstance.getPage(pageNum).then(function (pdfPage) {
+          pdfPage.getTextContent().then(function (textContent) {
+            var textItems = textContent.items;
+            var finalString = "";
+            for (var i = 0; i < textItems.length; i++) {
+              var item = textItems[i];
+              finalString += item.str + " ";
+            }
+            resolve(finalString);
+          });
+        });
+      });
+    }
+
+    let PDF_URL = filePath;
+    pdfjs.getDocument(PDF_URL).promise.then(
+      function (PDFDocumentInstance) {
+        var pageNumber = 1;
+        getPageText(pageNumber, PDFDocumentInstance).then(function (textPage) {
+          function extractInformation(text) {
+            const info = {};
+            // Extract the receipt ID
+            const receiptIdRegex = /Reciept ID : (\d+)/;
+            const receiptIdMatch = text.match(receiptIdRegex);
+            if (receiptIdMatch) {
+              info.receiptId = receiptIdMatch[1];
+            }
+
+            function convertToUppercaseAndRemoveSpaces(str) {
+              return str.toUpperCase().replace(/ /g, "");
+            }
+
+            // Extract the card number
+            const cardNumberRegex = /Card Number : (\w+)/;
+            const cardNumberMatch = text.match(cardNumberRegex);
+            if (cardNumberMatch) {
+              info.cardNumber = convertToUppercaseAndRemoveSpaces(
+                cardNumberMatch[1]
+              );
+            }
+
+            // Extract the patient name
+            const patientNameRegex = /Patient Name : (\w+ \w+)/;
+            const patientNameMatch = text.match(patientNameRegex);
+            if (patientNameMatch) {
+              info.patientName = patientNameMatch[1];
+            }
+
+            // Extract the payment method
+            const paymentMethodRegex = /Payment Method : (\w+)/;
+            const paymentMethodMatch = text.match(paymentMethodRegex);
+            if (paymentMethodMatch) {
+              info.paymentMethod = paymentMethodMatch[1];
+            }
+
+            // Extract the amount paid using a regular expression
+            const amountPaidRegex = /Amount Paid : (\d+)/;
+            const amountPaidMatch = amountPaidRegex.exec(text);
+            if (amountPaidMatch) {
+              info.amountPaid = amountPaidMatch[1];
+            }
+
+            // Extract the outstanding amount using a regular expression
+            const outstandingRegex = /Outstanding : (\d+)/;
+            const outstandingMatch = outstandingRegex.exec(text);
+            if (outstandingMatch) {
+              info.outstanding = outstandingMatch[1];
+            }
+
+            return info;
+          }
+          let details = extractInformation(textPage);
+          contexts.push(details);
+        });
+      },
+      function (reason) {
+        console.error(reason);
+      }
+    );
+  });
+
+  setTimeout(() => {
+    res.status(200).json({
+      contexts,
+    });
+  }, 1500);
+});
+
+app.get("/", function (req, res) {
+  res.sendFile(path.join(__dirname, "./index.html"), function (err) {
+    if (err) {
+      res.status(500).send(err);
+    }
+  });
+});
+
+app.listen(5000, () => {
+  console.log("Server listening on port 5000");
+});

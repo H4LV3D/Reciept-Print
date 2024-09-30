@@ -26,6 +26,7 @@
 
     <title>LFMC RECIEPT</title>
   </head>
+
   <body>
     <div class="row d-flex">
       <div class="d-none d-md-block sidebar">
@@ -63,7 +64,7 @@
             <div class="profile-details">
               <i class="fas fa-user-tag fa-3x fa-fw"></i>
               <div class="name_job">
-                <div class="name">MRS GIFT</div>
+                <div class="name" id="cashier"></div>
                 <div class="job">Cashier</div>
               </div>
             </div>
@@ -103,6 +104,9 @@
         }
       }
       pageLoad();
+
+      document.getElementById("cashier").innerText =
+        localStorage.getItem("username");
 
       function logout() {
         localStorage.setItem("username", "");
